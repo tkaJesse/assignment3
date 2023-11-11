@@ -30,6 +30,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { DocumentHolder } from '../Engine/DocumentHolder';
+import { ChatDataBase } from '../Engine/ChatDataBase';
 import { PortsGlobal } from '../ServerDataDefinitions';
 
 // define a debug flag to turn on debugging
@@ -63,6 +64,8 @@ app.use((req, res, next) => {
 
 
 const documentHolder = new DocumentHolder();
+const database = new ChatDataBase();
+
 
 // GET /documents
 app.get('/documents', (req: express.Request, res: express.Response) => {
@@ -265,6 +268,37 @@ app.put('/document/clear/formula/:name', (req: express.Request, res: express.Res
     const resultJSON = documentHolder.clearFormula(name, userName);
 
     res.status(200).send(resultJSON);
+});
+
+app.get('/message/:user/:message', (req, res) => {
+    const message = req.params.message;
+    const user = req.params.user;
+    console.log(`get /message/${message}/${user}`);
+    database.addMessage(user, message);
+    const result = database.getMessages('');
+    return res.json(result);
+});
+
+app.get('/', (req, res) => {
+    const result = database.getMessages('');
+    console.log('get /');
+    return res.json(result);
+});
+
+app.get('/messages/getall', (req, res) => {
+    const result = database.getAllMessages();
+    console.log('get /messages/getall');
+    return res.json(result);
+});
+
+app.get('/messages/get/:pagingToken?', (req, res) => {
+    // if there is no :pagingToken, then it will be an empty string
+
+    let pagingToken = req.params.pagingToken || '';
+
+    const result = database.getMessages(pagingToken);
+    console.log(`get /messages/get/${pagingToken}`);
+    return res.json(result);
 });
 
 // get the port we should be using

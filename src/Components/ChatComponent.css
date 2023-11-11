@@ -1,0 +1,35 @@
+/* Add styles for the chat container */
+.view-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 600px;
+}
+
+.view-container .scrollable-text-view {
+    height: 400px;
+    width: 600px;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px; 
+}
+
+.scrollable-text-view textarea {
+    min-height: 50px;
+}
+
+.view-container .input-container {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between; 
+    margin-top: 10px; 
+}
+
+.view-container input {
+    flex-grow: 1; /* Allow input to grow and take remaining space */
+}
+
+.view-container button {
+    width: 80px; /* Set a specific width for the button to make it smaller */
+}

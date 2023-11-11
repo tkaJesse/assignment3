@@ -7,6 +7,7 @@ import './App.css';
 import SpreadSheet from './Components/SpreadSheet';
 import SpreadSheetClient from './Engine/SpreadSheetClient';
 import LoginPageComponent from './Components/LoginPageComponent';
+import ChatComponent from './Components/ChatComponent';
 
 function App() {
 
@@ -82,6 +83,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <SpreadSheet documentName={documentName} spreadSheetClient={spreadSheetClient} />
+        <ChatComponent />
       </header>
 
     </div>
