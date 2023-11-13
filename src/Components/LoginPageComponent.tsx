@@ -53,13 +53,16 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
 
   }
 
-  function checkUserName(): boolean {
-    if (userName === "") {
-      alert("Please enter a user name");
-      return false;
-    }
-    return true;
+
+  function checkUserName(name: string): boolean {
+  if (name === "") {
+    alert("Please enter a user name");
+    return false;
   }
+  return true;
+}
+
+
   function loadDocument(documentName: string) {
     // set the document name
     spreadSheetClient.documentName = documentName;
@@ -84,74 +87,78 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
   }
 
 
-  function buildFileSelector() {
-    if (userName === "") {
-      return <div>
-        <h4>Please enter a user name</h4>
-        <br />
-        You must be logged in to<br />
-        access the documents!
-      </div>;
-    }
-
-    const sheets: string[] = spreadSheetClient.getSheets();
-    // make a table with the list of sheets and a button beside each one to edit the sheet
-    return <div>
-      <table>
-        <thead>
-          <tr className="selector-title">
-            <th>Document Name---</th>
-            <th>Actions</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {sheets.map((sheet) => {
-            return <tr className="selector-item">
-              <td >{sheet}</td>
-              <td><button onClick={() => loadDocument(sheet)}>
-                Edit
-              </button></td>
-            </tr>
-          })}
-        </tbody>
-      </table>
-    </div >
-  }
-
   function getLoginPanel() {
-    return <div>
-      <h5 >Login Page</h5>
-      {getUserLogin()}
-      <button onClick={() => logout()}>Logout</button>
-    </div>
+    const handleLogin = () => {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      if (inputElement) {
+        const inputUserName = inputElement.value;
+        if (checkUserName(inputUserName)) {
+          window.sessionStorage.setItem('userName', inputUserName);
+          setUserName(inputUserName);
+          spreadSheetClient.userName = inputUserName;
+        }
+      }
+    };
+      
+  
+    if (userName) {
+      return (
+        <div>
+          <p>Welcome, {userName}</p>
+          <button onClick={() => logout()}>Logout</button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h5>Please enter username</h5>
+          {getUserLogin()}
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      );
+    }
+  }
+  
+
+
+  function buildFileSelector() {
+    const sheets: string[] = spreadSheetClient.getSheets();
+    return (
+      <div>
+        <h5>Documents</h5>
+        <table>
+          <thead>
+            <tr className="selector-title">
+              <th>Document Name</th>
+              <th>Actions</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {sheets.map((sheet, index) => (
+              <tr key={index} className="selector-item">
+                <td>{sheet}</td>
+                <td>
+                  <button onClick={() => loadDocument(sheet)}>Edit</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 
-  function loginPage() {
-
-    return <table>
-
-
-      <tbody>
-        <tr>
-          <td>
-            {getLoginPanel()}
-          </td>
-          <td>
-            {buildFileSelector()}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-
-  }
-
-
+  
 
   return (
     <div className="LoginPageComponent">
-      {loginPage()}
+      <div className="loginPanel">
+        {getLoginPanel()}
+      </div>
+      <div className="documentSelector">
+        {userName && buildFileSelector()}
+      </div>
     </div>
   );
 }
