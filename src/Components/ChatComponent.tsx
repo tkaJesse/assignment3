@@ -15,7 +15,11 @@ function ChatComponent() {
     const [user] = useState<string>(() => window.sessionStorage.getItem('userName') || "");
     const [message, setMessage] = useState<string>("Hello World");
     const bottomRef = useRef(null);
+    const [isMinimized, setIsMinimized] = useState(false);
 
+    const toggleMinimize = () => {
+        setIsMinimized(!isMinimized);
+    };
 
     let localUser = user;
     let localMessage = message;
@@ -45,8 +49,7 @@ function ChatComponent() {
 
 
     function makeFormatedMessages() {
-        let slicedMessages = messages.slice(-20);
-        let formatedMessages = slicedMessages.reverse().map((message, index, array) => {
+        let formatedMessages = [...messages].reverse().map((message, index, array) => {
             if (index === array.length - 1) { // if this is the last message
                 return <textarea key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
             } else {
@@ -59,30 +62,35 @@ function ChatComponent() {
     return (
         <div>
             <h1>Chat</h1>
-            <button onClick={() => chatClient.getNextMessages()}>Get Older Messages</button>
-            <div className="view-container">
-                <div className="scrollable-text-view">
-                    {makeFormatedMessages()}
+            <button onClick={toggleMinimize}>
+                {isMinimized ? 'Maximize' : 'Minimize'}
+            </button>
+    
+            {!isMinimized && (
+                <div className="view-container">
+                    <div className="scrollable-text-view">
+                        {makeFormatedMessages()}
+                    </div>
+                    <div className="input-container">
+                        <input
+                            type="text"
+                            id="message"
+                            placeholder={message}
+                            onKeyUp={(event) => {
+                                localMessage = event.currentTarget.value;
+                                setMessage(event.currentTarget.value);
+                                if (event.key === "Enter") {
+                                    chatClient.sendMessage(localUser, localMessage);
+                                    // 清空消息
+                                    event.currentTarget.value = "";
+                                    setMessage("");
+                                }
+                            }}
+                        />
+                        <button onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
+                    </div>
                 </div>
-                <div className="input-container">
-                    <input
-                        type="text"
-                        id="message"
-                        placeholder={message}
-                        onKeyUp={(event) => {
-                            localMessage = event.currentTarget.value;
-                            setMessage(event.currentTarget.value);
-                            if (event.key === "Enter") {
-                                chatClient.sendMessage(localUser, localMessage);
-                                // Clear the message
-                                event.currentTarget.value = "";
-                                setMessage("");
-                            }
-                        }}
-                    />
-                    <button onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
-                </div>
-            </div>
+            )}
         </div>
     );
     
