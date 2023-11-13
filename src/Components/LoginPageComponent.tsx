@@ -125,7 +125,7 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
     const sheets: string[] = spreadSheetClient.getSheets();
     return (
       <div>
-        <h5>Documents</h5>
+
         <table>
           <thead>
             <tr className="selector-title">

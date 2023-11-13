@@ -23,3 +23,55 @@ button {
 button:hover {
   background-color: #45a049;
 }
+
+.documentSelector {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+  }
+  
+  .documentSelector h5 {
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .documentSelector table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  
+  .documentSelector th, .documentSelector td {
+    padding: 12px 15px;
+    border: 1px solid #e1e4e8;
+    color: #333;
+  }
+  
+  .documentSelector th {
+    background-color: #f7f7f7;
+    font-weight: bold;
+  }
+  
+  .documentSelector tr.selector-item:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+  
+  .documentSelector button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .documentSelector button:hover {
+    background-color: #0056b3;
+  }
+  
