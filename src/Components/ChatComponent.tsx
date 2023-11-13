@@ -62,37 +62,45 @@ function ChatComponent() {
     return (
         <div>
             <h1>Chat</h1>
-            <button onClick={toggleMinimize}>
-                {isMinimized ? 'Maximize' : 'Minimize'}
-            </button>
     
-            {!isMinimized && (
-                <div className="view-container">
+            <div className="view-container">
+                {!isMinimized && (
                     <div className="scrollable-text-view">
                         {makeFormatedMessages()}
                     </div>
-                    <div className="input-container">
-                        <input
-                            type="text"
-                            id="message"
-                            placeholder={message}
-                            onKeyUp={(event) => {
-                                localMessage = event.currentTarget.value;
-                                setMessage(event.currentTarget.value);
-                                if (event.key === "Enter") {
-                                    chatClient.sendMessage(localUser, localMessage);
-                                    // Clear the input
-                                    event.currentTarget.value = "";
-                                    setMessage("");
-                                }
-                            }}
-                        />
-                        <button onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
+                )}
+
+                <div className="input-container">
+                    <div className="chat-controls">
+                        <button onClick={toggleMinimize}>
+                            {isMinimized ? 'Maximize' : 'Minimize'}
+                        </button>
+                        <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
                     </div>
+                    <input
+                        type="text"
+                        id="message"
+                        placeholder={message}
+                        onKeyUp={(event) => {
+                            localMessage = event.currentTarget.value;
+                            setMessage(event.currentTarget.value);
+                            if (event.key === "Enter") {
+                                chatClient.sendMessage(localUser, localMessage);
+                                event.currentTarget.value = "";
+                                setMessage("");
+                            }
+                        }}
+                    />
+                    <button onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
                 </div>
-            )}
+            </div>
         </div>
     );
+    
+    
+
+
+    
     
 }
 
