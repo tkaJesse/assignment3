@@ -81,7 +81,7 @@ function ChatComponent() {
                                 setMessage(event.currentTarget.value);
                                 if (event.key === "Enter") {
                                     chatClient.sendMessage(localUser, localMessage);
-                                    // 清空消息
+                                    // Clear the input
                                     event.currentTarget.value = "";
                                     setMessage("");
                                 }
