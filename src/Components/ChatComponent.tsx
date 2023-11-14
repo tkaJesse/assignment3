@@ -49,15 +49,15 @@ function ChatComponent() {
 
 
     function makeFormatedMessages() {
-        let formatedMessages = [...messages].reverse().map((message, index, array) => {
-            if (index === array.length - 1) { // if this is the last message
-                return <textarea key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
+        let formatedMessages = messages.map((message, index) => {
+            if (index === 0) {
+                return <textarea key={message.id} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
             } else {
-                return <textarea key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} />
+                return <textarea key={message.id} readOnly value={message.id + "]" + message.user + ": " + message.message} />
             }
         });
         return formatedMessages;
-    }
+    }    
 
     return (
         <div>
