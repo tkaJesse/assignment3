@@ -75,7 +75,7 @@ function ChatComponent() {
                         <button onClick={toggleMinimize}>
                             {isMinimized ? 'Maximize' : 'Minimize'}
                         </button>
-                        <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
+                        
                     </div>
                     <input
                         type="text"
