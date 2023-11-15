@@ -47,9 +47,9 @@ function ChatComponent() {
     function makeFormatedMessages() {
         let formatedMessages = [...messages].reverse().map((message, index, array) => {
             if (index === array.length - 1) { // if this is the last message
-                return <textarea key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
+                return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
             } else {
-                return <textarea key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} />
+                return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} />
             }
         });
         return formatedMessages;
@@ -58,7 +58,7 @@ function ChatComponent() {
     return (
         <div>
             <h1>Chat</h1>
-            <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
+            <button id='getMessageBtn' onClick={() => chatClient.getNextMessages()}>Get Messages</button>
             <div className="view-container">
                 <div className="scrollable-text-view">
                     {makeFormatedMessages()}

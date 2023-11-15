@@ -190,7 +190,7 @@ function SpreadSheet({ documentName, spreadSheetClient }: SpreadSheetProps) {
   return (
     <div>
       <Status statusString={statusString} userName={userName}></Status>
-      <button onClick={returnToLoginPage}>Return to Login Page</button>
+      <button id='retrunToLoginPage'  onClick={returnToLoginPage}>Return to Login Page</button>
       <Formula formulaString={formulaString} resultString={resultString}  ></Formula>
 
       {<SheetHolder cellsValues={cells}

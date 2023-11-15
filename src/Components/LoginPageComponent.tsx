@@ -36,6 +36,7 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
   function getUserLogin() {
     return <div>
       <input
+        id='loginUserName'
         type="text"
         placeholder="User name"
         defaultValue={userName}
@@ -109,7 +110,9 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
           {sheets.map((sheet) => {
             return <tr className="selector-item">
               <td >{sheet}</td>
-              <td><button onClick={() => loadDocument(sheet)}>
+              <td><button 
+              id={sheet}
+              onClick={() => loadDocument(sheet)}>
                 Edit
               </button></td>
             </tr>
