@@ -79,7 +79,7 @@ function ChatComponent() {
                             }
                         }}
                     />
-                    <button onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
+                    <button id='sendBtn' onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
                 </div>
             </div>
         </div>

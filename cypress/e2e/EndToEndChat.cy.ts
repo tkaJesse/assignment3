@@ -72,7 +72,7 @@ describe('check previous message', () => {
 
 
 // user story 6, check if chat maintain in order
-describe('login could see 10 previous messages', () => {
+describe('maintain the chat message order', () => {
   it('successfully passed', () => {
     cy.visit('http://localhost:3000');
     cy.get('#loginUserName').click().type('Jesse{enter}');
