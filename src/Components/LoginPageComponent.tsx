@@ -41,26 +41,32 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
         defaultValue={userName}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            // get the text from the input
-            let userName = (event.target as HTMLInputElement).value;
-            window.sessionStorage.setItem('userName', userName);
-            // set the user name
-            setUserName(userName);
-            spreadSheetClient.userName = userName;
+            const inputUserName = (event.target as HTMLInputElement).value;
+            if (checkUserName(inputUserName)) {
+              window.sessionStorage.setItem('userName', inputUserName);
+              setUserName(inputUserName);
+              spreadSheetClient.userName = inputUserName;
+            }
           }
         }} />
     </div>
 
   }
+  
 
 
   function checkUserName(name: string): boolean {
-  if (name === "") {
-    alert("Please enter a user name");
-    return false;
+    if (name === "") {
+      alert("Please enter a user name");
+      return false;
+    }
+    if (name.length > 15) {
+      alert("User name must be 15 characters or less");
+      return false;
+    }
+    return true;
   }
-  return true;
-}
+  
 
 
   function loadDocument(documentName: string) {
