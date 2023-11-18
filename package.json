@@ -29,7 +29,7 @@
     "web-vitals": "^2.1.4",
     "whatwg-url": "^13.0.0",
     "zlib": "^1.0.5",
-    "serve": "^14.2.1",
+    "serve": "^14.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
