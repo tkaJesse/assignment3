@@ -24,7 +24,8 @@ class SpreadSheetClient {
 
 
     private _serverPort: number = PortsGlobal.serverPort;
-    private _baseURL: string = `${LOCAL_SERVER_URL}:${this._serverPort}`;
+    // private _baseURL: string = `${LOCAL_SERVER_URL}:${this._serverPort}`;
+    private _baseURL: string = 'https://calsheet-supernova.onrender.com';
     private _userName: string = '';
     private _documentName: string = '';
     private _document: DocumentTransport;
@@ -392,6 +393,7 @@ class SpreadSheetClient {
         // put the user name in the body
         const userName = user;
         const fetchURL = `${this._baseURL}/documents/`;
+        console.log("current url: ", fetchURL);
         fetch(fetchURL)
             .then(response => {
                 return response.json() as Promise<string[]>;

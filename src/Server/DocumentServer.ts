@@ -28,7 +28,7 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+// import cors from 'cors';
 import { DocumentHolder } from '../Engine/DocumentHolder';
 import { ChatDataBase } from '../Engine/ChatDataBase';
 import { PortsGlobal } from '../ServerDataDefinitions';
@@ -43,13 +43,19 @@ if (!debug) {
 
 
 const app = express();
-app.use(cors());
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', 'http://pencil.local:3000');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-//     next();
-// });
+const cors = require("cors")
+const corsOptions={
+  origin: "*",
+  credentials:true,
+  optionSuccessStatus:200,
+}
+app.use(cors(corsOptions));
+app.use((req, res, next) => {
+    //res.setHeader('Access-Control-Allow-Origin', 'https://frontend-assignment3-supernova.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 app.use(bodyParser.json());
 
 // Add a middleware function to log incoming requests
@@ -302,7 +308,7 @@ app.get('/messages/get/:pagingToken?', (req, res) => {
 });
 
 // get the port we should be using
-const port = PortsGlobal.serverPort;
+const port = PortsGlobal.serverPort || process.env.PORT;
 // start the app and test it
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
