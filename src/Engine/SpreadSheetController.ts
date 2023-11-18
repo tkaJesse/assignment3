@@ -130,7 +130,7 @@ export class SpreadSheetController {
     }
 
     // // remove the user from the list of users
-    // this._contributingUsers.delete(user);
+    this._contributingUsers.delete(user);
 
   }
 
