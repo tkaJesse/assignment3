@@ -78,7 +78,7 @@ class ChatClient {
      */
     getMessages(pagingToken: string = '') {
 
-        const url = `http://localhost:3005/messages/get/`;
+        const url = `https://calsheet-supernova.onrender.com/messages/get/`;
 
         const fetchURL = `${url}${pagingToken}`;
         fetch(fetchURL)
@@ -113,7 +113,7 @@ class ChatClient {
 
     sendMessage(user: string, message: string) {
         console.log("sentMessage()");
-        const url = `http://localhost:3005/message/${user}/${message}`;
+        const url = `https://calsheet-supernova.onrender.com/message/${user}/${message}`;
 
         fetch(url)
             .then(response => response.json())
