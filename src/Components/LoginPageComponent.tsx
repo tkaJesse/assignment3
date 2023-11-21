@@ -165,34 +165,6 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
   
 
 
-  function buildFileSelector() {
-    const sheets: string[] = spreadSheetClient.getSheets();
-    return (
-      <div>
-
-        <table>
-          <thead>
-            <tr className="selector-title">
-              <th>Document Name</th>
-              <th>Actions</th>
-              
-            </tr>
-          </thead>
-          <tbody>
-            {sheets.map((sheet, index) => (
-              <tr key={index} className="selector-item">
-                <td>{sheet}</td>
-                <td>
-                  <button onClick={() => loadDocument(sheet)}>Edit</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-
   
 
   return (
