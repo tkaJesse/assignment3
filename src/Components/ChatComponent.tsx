@@ -15,29 +15,20 @@ function ChatComponent() {
     const [user] = useState<string>(() => window.sessionStorage.getItem('userName') || "");
     const [message, setMessage] = useState<string>("Hello World");
     const bottomRef = useRef(null);
+    const [isMinimized, setIsMinimized] = useState(false);
 
+    const toggleMinimize = () => {
+        setIsMinimized(!isMinimized);
+    };
 
     let localUser = user;
     let localMessage = message;
     const updateDisplay = useCallback(() => {
-        let updateNeeded = false;
-        const newLastId = chatClient.messages[0].id;
-        if (newLastId !== mostRecentId) {
-            updateNeeded = true;
-        }
-        if (chatClient.previousMessagesFetched) {
-            updateNeeded = true;
-            chatClient.previousMessagesFetched = false;
-        }
-        if (!updateNeeded) {
-            return;
-        }
+    if (chatClient.messages.length !== messages.length) {
+        setMessages([...chatClient.messages]);
+    }
+}, [messages]);
 
-        let newMessages = [...chatClient.messages];
-
-        setMessages(newMessages);
-        setMostRecentId(newLastId);
-    }, [mostRecentId, messages]);
 
     useEffect(() => {
         chatClient.setCallback(updateDisplay);
@@ -45,6 +36,7 @@ function ChatComponent() {
 
 
     function makeFormatedMessages() {
+
         let formatedMessages = [...messages].reverse().map((message, index, array) => {
             if (index === array.length - 1) { // if this is the last message
                 return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
@@ -53,17 +45,26 @@ function ChatComponent() {
             }
         });
         return formatedMessages;
-    }
+    }    
 
     return (
         <div>
             <h1>Chat</h1>
             <button id='getMessageBtn' onClick={() => chatClient.getNextMessages()}>Get Messages</button>
             <div className="view-container">
-                <div className="scrollable-text-view">
-                    {makeFormatedMessages()}
-                </div>
+                {!isMinimized && (
+                    <div className="scrollable-text-view">
+                        {makeFormatedMessages()}
+                    </div>
+                )}
+
                 <div className="input-container">
+                    <div className="chat-controls">
+                        <button onClick={toggleMinimize}>
+                            {isMinimized ? 'Maximize' : 'Minimize'}
+                        </button>
+                        <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
+                    </div>
                     <input
                         type="text"
                         id="message"
@@ -73,7 +74,6 @@ function ChatComponent() {
                             setMessage(event.currentTarget.value);
                             if (event.key === "Enter") {
                                 chatClient.sendMessage(localUser, localMessage);
-                                // Clear the message
                                 event.currentTarget.value = "";
                                 setMessage("");
                             }
@@ -84,6 +84,11 @@ function ChatComponent() {
             </div>
         </div>
     );
+    
+    
+
+
+    
     
 }
 

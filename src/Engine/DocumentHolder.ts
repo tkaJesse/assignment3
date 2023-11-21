@@ -160,6 +160,12 @@ export class DocumentHolder {
         return document!.requestEditAccess(user, cellLabel);
     }
 
+    public releaseEditAccess(docName: string, user: string): void {
+        let document = this._documents.get(docName);
+
+        return document!.releaseEditAccess(user);
+    }
+
     public addToken(docName: string, token: string, user: string,): any {
         let document = this._documents.get(docName);
 

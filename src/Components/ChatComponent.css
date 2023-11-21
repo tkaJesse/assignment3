@@ -4,32 +4,57 @@
     flex-direction: column;
     height: 100%;
     width: 600px;
+    background-color: #f3f3f3; /* 浅灰色背景 */
+    border-radius: 8px; /* 边框圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 轻微阴影效果 */
+    padding: 20px; /* 内部间距 */
 }
 
 .view-container .scrollable-text-view {
     height: 400px;
-    width: 600px;
+    width: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
 }
 
 .scrollable-text-view textarea {
     min-height: 50px;
+    border: none;
+    margin: 5px 0;
 }
 
 .view-container .input-container {
     display: flex;
-    align-items: center; 
-    justify-content: space-between; 
-    margin-top: 10px; 
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
 }
 
 .view-container input {
-    flex-grow: 1; /* Allow input to grow and take remaining space */
+    flex-grow: 1;
+    padding: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .view-container button {
-    width: 80px; /* Set a specific width for the button to make it smaller */
+    width: 80px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.view-container button:hover {
+    background-color: #0056b3;
 }

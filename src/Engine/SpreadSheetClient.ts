@@ -51,6 +51,9 @@ class SpreadSheetClient {
         console.log(`process.env = ${JSON.stringify(process.env)}`);
         this.getDocuments(this._userName);
 
+        window.addEventListener('beforeunload', (event) => {
+            this.releaseEditAccess();
+        });
     }
 
     private _initializeBlankDocument(): DocumentTransport {
@@ -244,6 +247,21 @@ class SpreadSheetClient {
             });
     }
 
+    public releaseEditAccess(): void {
+        const requestReleaseEditURL = `${this._baseURL}/document/cell/release/${this._documentName}`;
+        fetch(requestReleaseEditURL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "userName": this._userName })
+        })
+            .then(response => {
+                return response.json() as Promise<DocumentTransport>;
+            }).then((document: DocumentTransport) => {
+                this._updateDocument(document);
+            });
+    }
 
 
     public addToken(token: string): void {

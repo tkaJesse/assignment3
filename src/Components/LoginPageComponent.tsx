@@ -42,25 +42,34 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
         defaultValue={userName}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
-            // get the text from the input
-            let userName = (event.target as HTMLInputElement).value;
-            window.sessionStorage.setItem('userName', userName);
-            // set the user name
-            setUserName(userName);
-            spreadSheetClient.userName = userName;
+            const inputUserName = (event.target as HTMLInputElement).value;
+            if (checkUserName(inputUserName)) {
+              window.sessionStorage.setItem('userName', inputUserName);
+              setUserName(inputUserName);
+              spreadSheetClient.userName = inputUserName;
+            }
           }
         }} />
     </div>
 
   }
+  
 
-  function checkUserName(): boolean {
-    if (userName === "") {
+
+  function checkUserName(name: string): boolean {
+    if (name === "") {
       alert("Please enter a user name");
+      return false;
+    }
+    if (name.length > 15) {
+      alert("User name must be 15 characters or less");
       return false;
     }
     return true;
   }
+  
+
+
   function loadDocument(documentName: string) {
     // set the document name
     spreadSheetClient.documentName = documentName;
@@ -123,38 +132,77 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
   }
 
   function getLoginPanel() {
-    return <div>
-      <h5 >Login Page</h5>
-      {getUserLogin()}
-      <button onClick={() => logout()}>Logout</button>
-    </div>
+    const handleLogin = () => {
+      const inputElement = document.querySelector('input[type="text"]') as HTMLInputElement;
+      if (inputElement) {
+        const inputUserName = inputElement.value;
+        if (checkUserName(inputUserName)) {
+          window.sessionStorage.setItem('userName', inputUserName);
+          setUserName(inputUserName);
+          spreadSheetClient.userName = inputUserName;
+        }
+      }
+    };
+      
+  
+    if (userName) {
+      return (
+        <div>
+          <p>Welcome, {userName}</p>
+          <button onClick={() => logout()}>Logout</button>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h5>Please enter username</h5>
+          {getUserLogin()}
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      );
+    }
+  }
+  
+
+
+  function buildFileSelector() {
+    const sheets: string[] = spreadSheetClient.getSheets();
+    return (
+      <div>
+
+        <table>
+          <thead>
+            <tr className="selector-title">
+              <th>Document Name</th>
+              <th>Actions</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {sheets.map((sheet, index) => (
+              <tr key={index} className="selector-item">
+                <td>{sheet}</td>
+                <td>
+                  <button onClick={() => loadDocument(sheet)}>Edit</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 
-  function loginPage() {
-
-    return <table>
-
-
-      <tbody>
-        <tr>
-          <td>
-            {getLoginPanel()}
-          </td>
-          <td>
-            {buildFileSelector()}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-
-  }
-
-
+  
 
   return (
     <div className="LoginPageComponent">
-      {loginPage()}
+      <div className="loginPanel">
+        {getLoginPanel()}
+      </div>
+      <div className="documentSelector">
+        {userName && buildFileSelector()}
+      </div>
     </div>
   );
 }

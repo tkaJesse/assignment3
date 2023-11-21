@@ -4,9 +4,19 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+All the automated tests can be found in the `testing-Jesse` branch. The tests are written in Cypress and can be found in the `\cypress` folder.
 
-### `npm start`
+This Spreadsheet application was deployed on Render but the backend server was not getting connected properly to the frontend server. Thus, for this iteration, only the back-end was deployed on [https://calsheet-supernova.onrender.com/](https://calsheet-supernova.onrender.com/). Please note if opening for the first time, it may take a few seconds (~15 secs) to load the page. You can also visit [https://calsheet-supernova.onrender.com/documents](https://calsheet-supernova.onrender.com/documents) to see the list of documents that are available on the server.
+
+Thus currently, you can run the application locally by cloning the repository and running the following commands in the project directory.
+
+In the project directory, you can run to start the backend server:
+
+### `npm run start-server`
+
+Then in the project directory in another terminal, you can run to start the frontend server:
+
+### `npm run start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
