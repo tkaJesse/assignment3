@@ -7,9 +7,10 @@ describe('message match while editing', () => {
     cy.visit('http://localhost:3000');
     cy.get('#loginUserName').click().type('Jesse{enter}');
     cy.get('#test1').click();
-    cy.get('.button-edit-start').click();
+    cy.get('.input-container').click();
     cy.get('#message').click().type('say hi to tommy{enter}');    
     cy.get('#retrunToLoginPage') .click();
+    cy.get('#logoutbtn') .click();
     cy.get('#loginUserName').click().clear().type('Tommy{enter}');
     cy.get('#test1').click();
     cy.get('.scrollable-text-view').children().last().contains("say hi to tommy").should('exist');
@@ -23,7 +24,6 @@ describe('check message format', () => {
     cy.visit('http://localhost:3000');
     cy.get('#loginUserName').click().type('Jesse{enter}');
     cy.get('#test1').click();
-    cy.get('.button-edit-start').click();
     cy.get('#message').click().type('say hi to tommy{enter}');    
     cy.get('.scrollable-text-view').children().last().contains("Jesse: say hi to tommy").should('exist');
 })
@@ -43,6 +43,7 @@ describe('login could see 10 previous messages', () => {
       cy.get('#message').click().type(`${ct} {enter}`);    
     }
     cy.get('#retrunToLoginPage') .click();
+    cy.get('#logoutbtn') .click();
     cy.get('#loginUserName').click().clear().type('Tommy{enter}');
     cy.get('#test1').click();
     cy.get('.scrollable-text-view').children().should('have.length', 10);
@@ -62,6 +63,7 @@ describe('check previous message', () => {
       cy.get('#message').click().type(`${ct} {enter}`);    
     }
     cy.get('#retrunToLoginPage') .click();
+    cy.get('#logoutbtn') .click();
     cy.get('#loginUserName').click().clear().type('Tommy{enter}');
     cy.get('#test1').click();
     cy.get('.scrollable-text-view').children().should('have.length', 10);
@@ -79,14 +81,44 @@ describe('maintain the chat message order', () => {
     cy.get('#test1').click();
     cy.get('#message').click().type('say hi to tommy{enter}');  
     cy.get('#retrunToLoginPage') .click();
+    cy.get('#logoutbtn') .click();
     cy.get('#loginUserName').click().clear().type('Tommy{enter}');
     cy.get('#test1').click();
     cy.get('.scrollable-text-view').children().last().contains("Jesse: say hi to tommy").should('exist');
     cy.get('#message').click().type('say hi to Jesse{enter}');
     cy.get('.scrollable-text-view').children().last().contains("Tommy: say hi to Jesse").should('exist');
     cy.get('#retrunToLoginPage') .click();
+    cy.get('#logoutbtn') .click();
     cy.get('#loginUserName').click().type('Jesse{enter}');
     cy.get('#test1').click();
     cy.get('.scrollable-text-view').children().last().contains("Tommy: say hi to Jesse").should('exist');
   })
+});
+
+// test message only store at the render server instead of the localhost
+
+describe('maintain chat message order', () => {
+  it('success at local server', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#loginUserName').click().type('Jesse{enter}');
+      cy.get('#test1').click();
+      for (let ct = 1; ct <= 25; ct++){
+          cy.get('#message').click().type(`${ct} {enter}`);    
+      }
+      cy.get('.scrollable-text-view').children().should('have.length', 35);
+  })
+
+  it('success at render server', () => {
+      cy.visit('http://localhost:3000');
+      cy.get('#loginUserName').click().type('Jesse{enter}');
+      cy.get('#test1').click();
+      cy.get('#renderhost').click();
+
+      for (let ct = 1; ct <= 20; ct++){
+          cy.get('#message').click().type(`${ct} {enter}`);    
+      }
+      cy.get('.scrollable-text-view').children().last().should('not.be', 25);
+  })
+
+
 });
