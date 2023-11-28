@@ -94,42 +94,7 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
   }
 
 
-  function buildFileSelector() {
-    if (userName === "") {
-      return <div>
-        <h4>Please enter a user name</h4>
-        <br />
-        You must be logged in to<br />
-        access the documents!
-      </div>;
-    }
-
-    const sheets: string[] = spreadSheetClient.getSheets();
-    // make a table with the list of sheets and a button beside each one to edit the sheet
-    return <div>
-      <table>
-        <thead>
-          <tr className="selector-title">
-            <th>Document Name---</th>
-            <th>Actions</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {sheets.map((sheet) => {
-            return <tr className="selector-item">
-              <td >{sheet}</td>
-              <td><button 
-              id={sheet}
-              onClick={() => loadDocument(sheet)}>
-                Edit
-              </button></td>
-            </tr>
-          })}
-        </tbody>
-      </table>
-    </div >
-  }
+  
 
   function getLoginPanel() {
     const handleLogin = () => {
@@ -149,7 +114,7 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
       return (
         <div>
           <p>Welcome, {userName}</p>
-          <button onClick={() => logout()}>Logout</button>
+          <button id ="logoutbtn" onClick={() => logout()}>Logout</button>
         </div>
       );
     } else {
@@ -163,6 +128,35 @@ function LoginPageComponent({ spreadSheetClient }: LoginPageProps): JSX.Element 
     }
   }
   
+
+
+  function buildFileSelector() {
+    const sheets: string[] = spreadSheetClient.getSheets();
+    return (
+      <div>
+
+        <table>
+          <thead>
+            <tr className="selector-title">
+              <th>Document Name</th>
+              <th>Actions</th>
+              
+            </tr>
+          </thead>
+          <tbody>
+            {sheets.map((sheet, index) => (
+              <tr key={index} className="selector-item">
+                <td>{sheet}</td>
+                <td>
+                  <button id={sheet} onClick={() => loadDocument(sheet)}>Edit</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
 
   

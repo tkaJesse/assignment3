@@ -22,7 +22,7 @@ describe('chat window integrated', () => {
         for (let ct = 1; ct <= 25; ct++){
             cy.get('#message').click().type(`${ct} {enter}`);    
         }
-        cy.get('.scrollable-text-view').children().should('have.length', 10);
+        cy.get('.scrollable-text-view').children().should('have.length', 35);
     })
 });
 
@@ -37,9 +37,9 @@ describe('chat window integrated', () => {
             cy.get('#message').click().type(`${ct} {enter}`);    
         }
         cy.get('#getMessageBtn').click();
-        cy.get('.scrollable-text-view').children().should('have.length', 20);
+        cy.get('.scrollable-text-view').children().should('have.length', 45);
         cy.get('#getMessageBtn').click();
-        cy.get('.scrollable-text-view').children().should('have.length', 25);
+        cy.get('.scrollable-text-view').children().should('have.length', 55);
  
     })
 });
@@ -54,12 +54,14 @@ describe('maintain chat message order', () => {
       cy.get('#test1').click();
       cy.get('#message').click().type('say hi to tommy{enter}');  
       cy.get('#retrunToLoginPage') .click();
+      cy.get('#logoutbtn') .click();
       cy.get('#loginUserName').click().clear().type('Tommy{enter}');
       cy.get('#test1').click();
       cy.get('.scrollable-text-view').children().last().contains("Jesse: say hi to tommy").should('exist');
       cy.get('#message').click().type('say hi to Jesse{enter}');
       cy.get('.scrollable-text-view').children().last().contains("Tommy: say hi to Jesse").should('exist');
       cy.get('#retrunToLoginPage') .click();
+      cy.get('#logoutbtn') .click();
       cy.get('#loginUserName').click().type('Jesse{enter}');
       cy.get('#test1').click();
       cy.get('.scrollable-text-view').children().last().contains("Tommy: say hi to Jesse").should('exist');
