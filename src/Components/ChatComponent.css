@@ -58,3 +58,9 @@
 .view-container button:hover {
     background-color: #0056b3;
 }
+
+.filterComponent {
+    display: flex;
+    flex-direction: row;
+
+}
