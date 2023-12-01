@@ -62,5 +62,17 @@
 .filterComponent {
     display: flex;
     flex-direction: row;
+}
 
+.view-container .input-container span {
+    color: orange;
+    cursor: pointer;
+}
+
+.view-container span:hover {
+    color: yellowgreen;
+}
+
+.emoji-icon {
+    color: orange;
 }

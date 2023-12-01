@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import { BsEmojiSmile } from 'react-icons/bs';
 import { MessageContainer } from "../Engine/GlobalDefinitions";
 
 import ChatClient from "../Engine/ChatClient";
@@ -13,11 +15,20 @@ function ChatComponent() {
     const [messages, setMessages] = useState<MessageContainer[]>([]);
     const [mostRecentId, setMostRecentId] = useState<number>(0);
     const [user] = useState<string>(() => window.sessionStorage.getItem('userName') || "");
-    const [message, setMessage] = useState<string>("Hello World");
+    const [message, setMessage] = useState("");
     const [filterUser, setFilterUser] = useState<string>("");
     const [searchMessage, setSearchMessage] = useState<string>("");
     const bottomRef = useRef(null);
     const [isMinimized, setIsMinimized] = useState(false);
+
+    const [showEmoji, setShowEmoji] = useState(false);
+    const addEmoji = (e: { unified: string; }) => {
+        const sym = e.unified.split('-');
+        const codesArray: any[] = [];
+        sym.forEach(el => codesArray.push('0x' + el));
+        let emoji = String.fromCodePoint(...codesArray);
+        setMessage(message + emoji);
+        };
 
     const toggleMinimize = () => {
         setIsMinimized(!isMinimized);
@@ -96,10 +107,13 @@ function ChatComponent() {
                         </button>
                         <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
                     </div>
-                    <input
-                        type="text"
+                    <textarea
+                        value={message}
                         id="message"
-                        placeholder={message}
+                        placeholder="Type a message..."
+                        cols={70}
+                        rows={2}
+                        onChange={(event) => setMessage(event.currentTarget.value)} 
                         onKeyUp={(event) => {
                             localMessage = event.currentTarget.value;
                             setMessage(event.currentTarget.value);
@@ -109,8 +123,26 @@ function ChatComponent() {
                                 setMessage("");
                             }
                         }}
-                    />
-                    
+                    >    
+                    </textarea>
+                    <span                         
+                        onClick={() => setShowEmoji(!showEmoji)}
+                        className="emoji-icon"
+                    >
+                    <BsEmojiSmile/>
+                    </span>  
+                    {showEmoji && 
+                        <div className="absolute top-[100%] right-2">
+                            <Picker
+                                data={data}
+                                maxFrequentRows={1}
+                                emojiSize={20}
+                                emojiButtonSize={28}
+                                onEmojiSelect={addEmoji} 
+                                previewEmoji={false}
+                            />
+                        </div>
+                        }
                     <button id='sendBtn' onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
                 </div>
             </div>
