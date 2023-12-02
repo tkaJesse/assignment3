@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ButtonNames } from "../Engine/GlobalDefinitions";
 
 
@@ -11,21 +11,34 @@ interface KeyPadProps {
   onButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCommandButtonClick: (text: string) => void;
   currentlyEditing: boolean;
-} // interface KeyPadProps
+}
 
 function KeyPad({ onButtonClick, onCommandButtonClick, currentlyEditing }: KeyPadProps) {
 
-  // the done button has two styles and two text values depending on currently Editing
-  // if currentlyEditing is true then the button will have the class button-edit-end
-  // and the text will be "="
-  // if currentlyEditing is false then the button will have the class button-edit-start
-  // and the text will be "edit"
+  const handleKeyPress = (event: KeyboardEvent) => {
+    let key = event.key;
+
+    if ("0123456789+-*/()".includes(key)) {
+      onButtonClick({ currentTarget: { textContent: key } } as React.MouseEvent<HTMLButtonElement>);
+    } else if (key === "Backspace") {
+      onCommandButtonClick(ButtonNames.clear);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [onButtonClick, onCommandButtonClick]);
+
   function getDoneButtonClass() {
     if (currentlyEditing) {
       return "button-edit-end";
     }
     return "button-edit-start";
-  } // getDoneButtonClass
+  }
 
   let doneButtonText = currentlyEditing ? ButtonNames.done : ButtonNames.edit;
 
