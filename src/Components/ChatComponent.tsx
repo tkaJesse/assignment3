@@ -48,17 +48,19 @@ function ChatComponent() {
     }, [updateDisplay]);
 
     function makeFormatedMessages() {
-        let filteredMessages1 = messages.filter((message) => {
+        let filteredMessagesByContent = messages.filter((message) => {
             return message.message.toLowerCase().includes(searchMessage.toLowerCase());
         });
-
-
-        let filteredMessages = filteredMessages1.filter((message) => {
-            return message.user.toLowerCase().match(filterUser.toLowerCase());
-        });
-
-        
-
+    
+        let filteredMessages = filteredMessagesByContent;
+    
+        // Apply user filter only if filterUser is not empty
+        if (filterUser.trim() !== "") {
+            filteredMessages = filteredMessagesByContent.filter((message) => {
+                return message.user.toLowerCase() === filterUser.toLowerCase().trim(); // Exact match
+            });
+        }
+    
         let formatedMessages = [...filteredMessages].reverse().map((message, index, array) => {
             if (index === array.length - 1) { // if this is the last message
                 return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
@@ -66,8 +68,10 @@ function ChatComponent() {
                 return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} />
             }
         });
+    
         return formatedMessages;
-    }    
+    }
+     
 
     return (
         <div>
@@ -147,10 +151,12 @@ function ChatComponent() {
                             />
                         </div>
                         }
-                    <button id='sendBtn' onClick={() => {
-                        chatClient.sendMessage(localUser, localMessage);
-                        setMessage("");
+                        <button id='sendBtn' onClick={() => {
+                            chatClient.sendMessage(localUser, localMessage);
+                            setMessage("");
+                            setFilterUser("");
                         }}>Send</button>
+
                 </div>
             </div>
         </div>

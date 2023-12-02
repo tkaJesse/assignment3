@@ -1,1 +1,1 @@
-{"columns":2,"rows":2,"cells":{"A1":{"formula":["234"],"value":234,"error":""},"A2":{"formula":["5","+","5"],"value":10,"error":""},"B1":{"formula":["12","-","10"],"value":2,"error":""},"B2":{"formula":["(","28","*","4",")","/","2"],"value":56,"error":""}}}
+{"columns":2,"rows":2,"cells":{"A1":{"formula":["1.0","*","128"],"value":128,"error":""},"A2":{"formula":["5","+","5"],"value":10,"error":""},"B1":{"formula":["12","-","10123","*","3"],"value":-30357,"error":""},"B2":{"formula":["(","28","*","4",")","/","2.5"],"value":44.8,"error":""}}}
