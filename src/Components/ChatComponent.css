@@ -4,10 +4,12 @@
     flex-direction: column;
     height: 100%;
     width: 600px;
-    background-color: #f3f3f3; /* 浅灰色背景 */
-    border-radius: 8px; /* 边框圆角 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 轻微阴影效果 */
-    padding: 20px; /* 内部间距 */
+    background-color: #f3f3f3; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    padding: 20px; 
+    position: relative;
+    margin-top: 10px;
 }
 
 .view-container .scrollable-text-view {
@@ -23,9 +25,10 @@
 }
 
 .scrollable-text-view textarea {
-    min-height: 50px;
+    min-height: 20px;
     border: none;
     margin: 5px 0;
+    resize: none;
 }
 
 .view-container .input-container {
@@ -45,7 +48,8 @@
 }
 
 .view-container button {
-    width: 80px;
+    width: auto;
+    height: auto;
     background-color: #007bff;
     color: white;
     border: none;
@@ -64,15 +68,34 @@
     flex-direction: row;
 }
 
-.view-container .input-container span {
-    color: orange;
+.view-container .chat-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    resize: none;
+}
+
+.view-container span {
+    position: absolute;
+    bottom: 3%;
+    left: 84%;
     cursor: pointer;
+    z-index: 1;
 }
 
 .view-container span:hover {
-    color: yellowgreen;
+    color: #0056b3;
 }
 
 .emoji-icon {
-    color: orange;
+    color: grey;
+}
+
+.view-container .picker {
+    position: absolute;
+    bottom: 10%;
+    left: 52%;
+    z-index: 1;
 }

@@ -126,10 +126,6 @@ class ChatClient {
             });
     }
 
-
-
-
-
 }
 
 export default ChatClient;

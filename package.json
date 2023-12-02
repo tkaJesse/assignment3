@@ -68,6 +68,7 @@
     "@types/uuid": "^9.0.2",
     "axios": "^1.4.0",
     "react-memory-stats": "^0.2.0",
+    "tailwindcss": "^3.3.5",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"
