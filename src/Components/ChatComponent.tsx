@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
+import { BsEmojiSmile } from 'react-icons/bs';
 import { MessageContainer } from "../Engine/GlobalDefinitions";
-
 import ChatClient from "../Engine/ChatClient";
 import './ChatComponent.css'
 
@@ -13,11 +14,22 @@ function ChatComponent() {
     const [messages, setMessages] = useState<MessageContainer[]>([]);
     const [mostRecentId, setMostRecentId] = useState<number>(0);
     const [user] = useState<string>(() => window.sessionStorage.getItem('userName') || "");
-    const [message, setMessage] = useState<string>("Hello World");
+    const [message, setMessage] = useState("");
     const [filterUser, setFilterUser] = useState<string>("");
     const [searchMessage, setSearchMessage] = useState<string>("");
     const bottomRef = useRef(null);
     const [isMinimized, setIsMinimized] = useState(false);
+
+    const [showEmoji, setShowEmoji] = useState(false);
+    const addEmoji = (e: { unified: string; }) => {
+        const sym = e.unified.split('-');
+        const codesArray: any[] = [];
+        sym.forEach(el => codesArray.push('0x' + el));
+        let emoji = String.fromCodePoint(...codesArray);
+        setMessage(message + emoji);
+        };
+
+        
 
     const toggleMinimize = () => {
         setIsMinimized(!isMinimized);
@@ -60,7 +72,7 @@ function ChatComponent() {
     return (
         <div>
             <h1>Chat</h1>
-            <button id='getMessageBtn' onClick={() => chatClient.getNextMessages()}>Get Messages</button>
+            <button id='getMessageBtn' onClick={() => chatClient.getNextMessages()}>Get Older Messages</button>
             <div className="view-container">
                 {!isMinimized && (
                     <div> 
@@ -94,12 +106,15 @@ function ChatComponent() {
                         <button onClick={toggleMinimize}>
                             {isMinimized ? 'Maximize' : 'Minimize'}
                         </button>
-                        <button onClick={() => chatClient.getNextMessages()}>Get Messages</button>
                     </div>
-                    <input
-                        type="text"
+                    <textarea
+                        className="chat-input"
+                        value={message}
                         id="message"
-                        placeholder={message}
+                        placeholder="Type a message..."
+                        cols={68}
+                        rows={2}
+                        onChange={(event) => setMessage(event.currentTarget.value)} 
                         onKeyUp={(event) => {
                             localMessage = event.currentTarget.value;
                             setMessage(event.currentTarget.value);
@@ -109,9 +124,34 @@ function ChatComponent() {
                                 setMessage("");
                             }
                         }}
-                    />
-                    
-                    <button id='sendBtn' onClick={() => chatClient.sendMessage(localUser, localMessage)}>Send</button>
+                    >    
+                    </textarea>
+
+                    <span                         
+                        onClick={() => {
+                            setShowEmoji(!showEmoji)
+                        }}
+                        className="emoji-icon"
+                    >
+                    <BsEmojiSmile/>
+                    </span>  
+                    {showEmoji && 
+                        <div className="picker">
+                            <Picker
+                                data={data}
+                                maxFrequentRows={1}
+                                emojiSize={20}
+                                emojiButtonSize={28}
+                                onEmojiSelect={addEmoji} 
+                                previewPosition="none"
+                                searchPosition="none"
+                            />
+                        </div>
+                        }
+                    <button id='sendBtn' onClick={() => {
+                        chatClient.sendMessage(localUser, localMessage);
+                        setMessage("");
+                        }}>Send</button>
                 </div>
             </div>
         </div>
