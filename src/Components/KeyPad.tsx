@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { ButtonNames } from "../Engine/GlobalDefinitions";
 
 
@@ -11,41 +11,48 @@ interface KeyPadProps {
   onButtonClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onCommandButtonClick: (text: string) => void;
   currentlyEditing: boolean;
-}
+} // interface KeyPadProps
 
 function KeyPad({ onButtonClick, onCommandButtonClick, currentlyEditing }: KeyPadProps) {
 
-  const handleKeyPress = (event: KeyboardEvent) => {
-    let key = event.key;
-
-    if ("0123456789+-*/()".includes(key)) {
-      onButtonClick({ currentTarget: { textContent: key } } as React.MouseEvent<HTMLButtonElement>);
-    } else if (key === "Backspace") {
-      onCommandButtonClick(ButtonNames.clear);
-    }
-  };
+  const keypadRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleKeyPress);
+    // Check if the ref is set
+    if (keypadRef.current) {
+      const handleKeyPress = (event: KeyboardEvent) => {
+        let key = event.key;
 
-    return () => {
-      window.removeEventListener("keydown", handleKeyPress);
-    };
-  }, [onButtonClick, onCommandButtonClick]);
+        if ("0123456789+-*/().".includes(key)) {
+          onButtonClick({ currentTarget: { textContent: key } } as React.MouseEvent<HTMLButtonElement>);
+        } else if (key === "Backspace") {
+          onCommandButtonClick(ButtonNames.clear);
+        }
+      };
+
+      const keypadEl = keypadRef.current;
+      keypadEl.addEventListener("keydown", handleKeyPress);
+
+      // Return a cleanup function to remove the event listener
+      return () => {
+        keypadEl.removeEventListener("keydown", handleKeyPress);
+      };
+    }
+  }, [onButtonClick, onCommandButtonClick]); 
 
   function getDoneButtonClass() {
     if (currentlyEditing) {
       return "button-edit-end";
     }
     return "button-edit-start";
-  }
+  } // getDoneButtonClass
 
   let doneButtonText = currentlyEditing ? ButtonNames.done : ButtonNames.edit;
 
   // the buttons use one of three classes
   // numberButton, operatorButton, and otherButton
   return (
-    <div className="buttons">
+    <div className="buttons" ref={keypadRef} tabIndex={0}>
       <div className="buttons-row">
 
 

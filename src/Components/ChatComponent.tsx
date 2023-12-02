@@ -54,7 +54,7 @@ function ChatComponent() {
 
 
         let filteredMessages = filteredMessages1.filter((message) => {
-            return message.user.toLowerCase().includes(filterUser.toLowerCase());
+            return message.user.toLowerCase().match(filterUser.toLowerCase());
         });
 
         
@@ -82,7 +82,6 @@ function ChatComponent() {
                                 type="text"
                                 id="filterMessage"
                                 placeholder="Search Message"
-                                
                                 value={searchMessage}
                                 onChange={(event) => setSearchMessage(event.target.value)}
                             />
