@@ -99,3 +99,26 @@
     left: 52%;
     z-index: 1;
 }
+
+.user-filter-dropdown {
+    position: absolute;
+    right: 0; /* Align to the right edge of the filterComponent */
+    left: 100%; /* Position below the filterComponent */
+    background-color: rgb(189, 188, 188);
+    border: 1px solid #ddd; /* Optional border */
+    border-radius: 5px;
+    z-index: 10; /* Ensure it's above other content */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Optional shadow */
+    max-height: 200px; /* Limit the height */
+    overflow-y: auto; /* Add scroll for overflow */
+    padding: 10px;
+    width: 100px; /* Set a fixed width */
+}
+
+/* Additional styling for individual checkboxes, labels, etc. */
+.user-filter-dropdown div {
+    margin-bottom: 5px;
+    font-size: 16px;
+    align-items: center;
+    align-content: center;
+}

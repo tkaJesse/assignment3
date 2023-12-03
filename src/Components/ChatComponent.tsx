@@ -20,6 +20,9 @@ function ChatComponent() {
     const bottomRef = useRef(null);
     const [isMinimized, setIsMinimized] = useState(false);
 
+    const [showUserFilterDropdown, setShowUserFilterDropdown] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState<{ [key: string]: boolean }>({});
+
     const [showEmoji, setShowEmoji] = useState(false);
     const addEmoji = (e: { unified: string; }) => {
         const sym = e.unified.split('-');
@@ -47,29 +50,54 @@ function ChatComponent() {
         chatClient.setCallback(updateDisplay);
     }, [updateDisplay]);
 
+    useEffect(() => {
+        const uniqueUsers = Array.from(new Set(messages.map(message => message.user)));
+        const userObject = uniqueUsers.reduce((obj, user) => ({ ...obj, [user]: false }), {});
+        setSelectedUsers(userObject);
+    }, [messages]);
+
+    const handleUserCheckboxChange = (username: string) => {
+        setSelectedUsers(prev => ({ ...prev, [username]: !prev[username] }));
+    };
+
+    // Rendering the user filter dropdown
+    const renderUserFilterDropdown = () => (
+        <div className="user-filter-dropdown">
+            {Object.keys(selectedUsers).map(user => (
+                <div key={user}>
+                    <input
+                        type="checkbox"
+                        id={`checkbox-${user}`}
+                        checked={selectedUsers[user]}
+                        onChange={() => handleUserCheckboxChange(user)}
+                    />
+                    <label htmlFor={`checkbox-${user}`}>{user}</label>
+                </div>
+            ))}
+        </div>
+    );
+
+
     function makeFormatedMessages() {
-        let filteredMessagesByContent = messages.filter((message) => {
-            return message.message.toLowerCase().includes(searchMessage.toLowerCase());
+        let userFilterActive = filterUser.trim() !== ""; // Check if user filter input is active
+        let checkboxFilterActive = Object.values(selectedUsers).some(val => val); // Check if any checkbox is selected
+
+        let filteredMessages = messages.filter(message => {
+            // Check if message matches search filter
+            let messageMatch = message.message.toLowerCase().includes(searchMessage.toLowerCase());
+
+            // Check if user matches the input box filter
+            let inputBoxUserMatch = userFilterActive ? message.user.toLowerCase() === filterUser.toLowerCase().trim() : true;
+
+            // Check if user matches the checkbox filter
+            let checkboxUserMatch = checkboxFilterActive ? selectedUsers[message.user] : true;
+
+            return messageMatch && inputBoxUserMatch && checkboxUserMatch;
         });
-    
-        let filteredMessages = filteredMessagesByContent;
-    
-        // Apply user filter only if filterUser is not empty
-        if (filterUser.trim() !== "") {
-            filteredMessages = filteredMessagesByContent.filter((message) => {
-                return message.user.toLowerCase() === filterUser.toLowerCase().trim(); // Exact match
-            });
-        }
-    
-        let formatedMessages = [...filteredMessages].reverse().map((message, index, array) => {
-            if (index === array.length - 1) { // if this is the last message
-                return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={bottomRef} />
-            } else {
-                return <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} />
-            }
-        });
-    
-        return formatedMessages;
+
+        return filteredMessages.reverse().map((message, index) => (
+            <textarea id='chatMessageText' key={index} readOnly value={message.id + "]" + message.user + ": " + message.message} ref={index === filteredMessages.length - 1 ? bottomRef : null} />
+        ));
     }
      
 
@@ -97,6 +125,8 @@ function ChatComponent() {
                                 value={filterUser}
                                 onChange={(event) => setFilterUser(event.target.value)}
                             />
+                            <button onClick={() => setShowUserFilterDropdown(!showUserFilterDropdown)}>Filter</button>
+                            {showUserFilterDropdown && renderUserFilterDropdown()}
                         </div>
                         <div className="scrollable-text-view"> 
                             {makeFormatedMessages()}
