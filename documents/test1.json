@@ -1,1 +1,1 @@
-{"columns":2,"rows":2,"cells":{"A1":{"formula":["5","-","5","cos","A2","B1"],"value":4.716337814536773,"error":"#ERR"},"A2":{"formula":["5","+","5"],"value":10,"error":""},"B1":{"formula":[],"value":0,"error":"#EMPTY!"},"B2":{"formula":[],"value":0,"error":"#EMPTY!"}}}
+{"columns":2,"rows":2,"cells":{"A1":{"formula":["1.0","*","128"],"value":128,"error":""},"A2":{"formula":["5","+","5"],"value":10,"error":""},"B1":{"formula":["344","-","902"],"value":-558,"error":""},"B2":{"formula":["(","28","*","4",")","/","2.5"],"value":44.8,"error":""}}}
