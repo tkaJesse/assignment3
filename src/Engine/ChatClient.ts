@@ -6,8 +6,9 @@
  */
 
 import { MessagesContainer, MessageContainer } from "./GlobalDefinitions";
+import BadWordsFilter from 'bad-words';
 
-
+const filter = new BadWordsFilter();
 
 class ChatClient {
 
@@ -34,6 +35,9 @@ class ChatClient {
 
     insertMessage(message: MessageContainer) {
         const messageID = message.id;
+
+        const filteredMessage = filter.clean(message.message);
+        message.message = filteredMessage;
 
         if (this.earliestMessageID > messageID) {
             this.earliestMessageID = messageID;
@@ -113,7 +117,11 @@ class ChatClient {
 
     sendMessage(user: string, message: string) {
         console.log("sentMessage()");
-        const url = `http://localhost:3005/message/${user}/${message}`;
+
+        // Filter out bad words from the message
+        const filteredMessage = filter.clean(message);
+
+        const url = `http://localhost:3005/message/${user}/${filteredMessage}`;
 
         fetch(url)
             .then(response => response.json())
