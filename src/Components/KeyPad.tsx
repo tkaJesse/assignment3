@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { ButtonNames } from "../Engine/GlobalDefinitions";
 
 
@@ -15,11 +15,31 @@ interface KeyPadProps {
 
 function KeyPad({ onButtonClick, onCommandButtonClick, currentlyEditing }: KeyPadProps) {
 
-  // the done button has two styles and two text values depending on currently Editing
-  // if currentlyEditing is true then the button will have the class button-edit-end
-  // and the text will be "="
-  // if currentlyEditing is false then the button will have the class button-edit-start
-  // and the text will be "edit"
+  const keypadRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Check if the ref is set
+    if (keypadRef.current) {
+      const handleKeyPress = (event: KeyboardEvent) => {
+        let key = event.key;
+
+        if ("0123456789+-*/().".includes(key)) {
+          onButtonClick({ currentTarget: { textContent: key } } as React.MouseEvent<HTMLButtonElement>);
+        } else if (key === "Backspace") {
+          onCommandButtonClick(ButtonNames.clear);
+        }
+      };
+
+      const keypadEl = keypadRef.current;
+      keypadEl.addEventListener("keydown", handleKeyPress);
+
+      // Return a cleanup function to remove the event listener
+      return () => {
+        keypadEl.removeEventListener("keydown", handleKeyPress);
+      };
+    }
+  }, [onButtonClick, onCommandButtonClick]); 
+
   function getDoneButtonClass() {
     if (currentlyEditing) {
       return "button-edit-end";
@@ -32,7 +52,7 @@ function KeyPad({ onButtonClick, onCommandButtonClick, currentlyEditing }: KeyPa
   // the buttons use one of three classes
   // numberButton, operatorButton, and otherButton
   return (
-    <div className="buttons">
+    <div className="buttons" ref={keypadRef} tabIndex={0}>
       <div className="buttons-row">
 
 
