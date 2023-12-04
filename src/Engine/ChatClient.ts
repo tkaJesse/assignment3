@@ -82,7 +82,7 @@ class ChatClient {
      */
     getMessages(pagingToken: string = '') {
 
-        const url = `http://localhost:3005/messages/get/`;
+        const url = `https://calsheet-supernova.onrender.com/messages/get/`;
 
         const fetchURL = `${url}${pagingToken}`;
         fetch(fetchURL)
@@ -121,7 +121,7 @@ class ChatClient {
         // Filter out bad words from the message
         const filteredMessage = filter.clean(message);
 
-        const url = `http://localhost:3005/message/${user}/${filteredMessage}`;
+        const url = `https://calsheet-supernova.onrender.com/message/${user}/${filteredMessage}`;
 
         fetch(url)
             .then(response => response.json())
